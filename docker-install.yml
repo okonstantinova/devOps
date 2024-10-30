@@ -1,0 +1,63 @@
+---
+- hosts: app
+  become: yes
+  tasks:
+    - name: Update apt repository and Upgrade packages
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: Install dependencies for Docker
+      apt: 
+        name: "{{ packages }}"
+      vars:
+        packages:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+      become: true
+
+    - name: Add Docker’s official GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Set up the stable repository for Docker
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+
+    - name: Install Docker Engine
+      apt: 
+        name: docker-ce
+        state: latest
+      become: true
+
+    - name: Install Git
+      apt: 
+        name: git
+        state: present
+      become: true
+
+    - name: Clone repository
+      git: 
+        repo: https://github.com/mdn/django-locallibrary-tutorial
+        dest: "{{ ansible_env.HOME }}/django-locallibrary"
+        update: yes
+
+    - name: Pull Docker image
+      docker_image:
+        name: timurbabs/django
+        source: pull
+
+    - name: Run Docker container
+      docker_container:
+        name: django_app
+        image: timurbabs/django
+        ports:
+          - "8000:8000"
+        command: python3 manage.py runserver 0.0.0.0:8000
+        detach: true
+        restart_policy: unless-stopped

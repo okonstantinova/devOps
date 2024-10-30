@@ -1,0 +1,11 @@
+app:
+  hosts:
+    node1:
+      ip: 192.168.56.11
+      name: node1
+    node2:
+      ip: 192.168.56.12
+      name: node2
+    node3:
+      ip: 192.168.56.13
+      name: node3
