@@ -1,0 +1,23 @@
+Host 94.26.228.63
+  User viktoria
+  Port 2228
+Host node1
+    Hostname 192.168.56.11
+    ProxyJump viktoria@94.26.228.63
+    User root
+    StrictHostKeyChecking no
+Host node2
+    Hostname 192.168.56.12
+    ProxyJump viktoria@94.26.228.63
+    User root
+    StrictHostKeyChecking no
+Host node3
+    Hostname 192.168.56.13
+    ProxyJump viktoria@94.26.228.63
+    User root
+    StrictHostKeyChecking no
+Host node4
+    Hostname 192.168.56.14
+    ProxyJump viktoria@94.26.228.63
+    User root
+    StrictHostKeyChecking no
